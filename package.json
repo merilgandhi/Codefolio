@@ -1,0 +1,61 @@
+{
+  "name": "codefolio",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "concurrently -k -n api,web \"node --watch server/index.js\" \"vite --host 127.0.0.1 --port 5174 --strictPort\"",
+    "dev:server": "node --watch server/index.js",
+    "dev:client": "vite --host 127.0.0.1 --port 5174 --strictPort",
+    "build": "node scripts/build-client.js",
+    "start": "node server/index.js",
+    "test": "node --test server/tests/*.test.js",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check",
+    "verify:db": "node server/scripts/verify-database.js",
+    "verify:auth": "node server/scripts/verify-auth.js",
+    "verify:profile": "node server/scripts/verify-profile.js",
+    "verify:projects": "node server/scripts/verify-projects.js",
+    "verify:skills": "node server/scripts/verify-skills.js",
+    "verify:preview": "node server/scripts/verify-preview.js",
+    "verify:templates": "node server/scripts/verify-templates.js",
+    "verify:rendering": "node server/scripts/verify-template-rendering.js",
+    "verify:public": "node server/scripts/verify-public.js",
+    "verify:seo": "node server/scripts/verify-seo.js",
+    "qa:polish": "node server/scripts/qa-polish.js",
+    "qa:contact": "node server/scripts/qa-polish.js --contact",
+    "verify:mail": "node server/scripts/verify-mail.js",
+    "verify:contact:delivery": "node server/scripts/send-contact-check.js",
+    "preview:email": "node server/scripts/preview-contact-email.js",
+    "account:tier": "node server/scripts/manage-tier.js",
+    "verify:plans": "node server/scripts/qa-polish.js --plans --once",
+    "qa:plans": "node server/scripts/qa-polish.js --plans",
+    "verify:domains": "node server/scripts/qa-polish.js --domains --once",
+    "qa:domains": "node server/scripts/qa-polish.js --domains"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^18.0.8",
+    "express": "^5.3.0",
+    "express-rate-limit": "^8.7.1",
+    "helmet": "^8.3.0",
+    "mongoose": "^9.11.2",
+    "nodemailer": "10.2.1",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-helmet-async": "3.0.0",
+    "react-hook-form": "^7.90.0",
+    "react-router-dom": "^7.18.4"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@vitejs/plugin-react": "^6.1.2",
+    "concurrently": "^10.0.6",
+    "prettier": "3.9.10",
+    "tailwindcss": "^4.3.3",
+    "vite": "^8.3.4"
+  }
+}
