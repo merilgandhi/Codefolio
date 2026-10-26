@@ -126,4 +126,5 @@ The complete PDF requirement matrix, acceptance checks, scope decisions and curr
 - [x] Pro badge, operator tier assignment and server-enforced premium authorization
 - [x] Pro-only domain simulation
 - [x] System design note explaining public username routing
+- [x] GitHub repository containing application source, tests and setup documentation
 - [ ] Deployment and permanent showcase profiles
