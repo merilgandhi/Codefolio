@@ -11,3 +11,9 @@ coverage/
 .seo-qa-control
 .polish-qa-control
 artifacts/
+.codex/
+.agents/
+.aws/
+.DS_Store
+Thumbs.db
+.*-qa-control
