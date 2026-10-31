@@ -1,6 +1,6 @@
 # Public contact form and Gmail API delivery
 
-Both public portfolio layouts include a **Contact** navigation link and the same responsive React Hook Form contact section. Render Free uses Gmail OAuth over HTTPS because SMTP is blocked. Production OAuth is configured, and on 2026-10-31 one approved message submitted through the public `@meril2203` contact form was confirmed in Inbox. This verifies that delivery path once; it does not verify password-reset email delivery or guarantee future inbox placement. Nodemailer composes the MIME email in both paths, and its stream transport hands the production message to Gmail's API.
+Both public portfolio layouts include a **Contact** navigation link and the same responsive React Hook Form contact section. Render Free uses Gmail OAuth over HTTPS because SMTP is blocked. Production OAuth is configured; one approved message submitted through the public `@meril2203` contact form was confirmed in Inbox, and on 2026-10-31 the user confirmed that the live password-reset flow also works. These checks confirm the flows at that time but do not guarantee future inbox placement. Nodemailer composes the MIME email in both paths, and its stream transport hands the production message to Gmail's API.
 
 ## Request flow and privacy
 
@@ -87,4 +87,4 @@ npm run verify:contact:delivery -- <username> --send
 
 That command sends one message to the selected account's stored email through the normal API. It requires the explicit `--send` flag. Check the registered inbox and confirm receipt separately; do not repeat automatically if a timeout leaves delivery uncertain.
 
-The [Pro tier/badge and premium-authorization milestone](PRO-ACCESS.md) and the Pro-only domain feature are complete. Contact email delivery has one production Inbox confirmation; password-reset delivery and the broader production workflow review remain open.
+The [Pro tier/badge and premium-authorization milestone](PRO-ACCESS.md) and the Pro-only domain feature are complete. Contact delivery and the live password-reset flow have user-confirmed production checks. The broader authenticated editor/plan/domain workflow review remains open.

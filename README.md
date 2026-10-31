@@ -56,7 +56,7 @@ To verify the configured Atlas database with temporary records, run `pnpm verify
 
 Run `pnpm verify:auth` for opt-in authentication integration checks against Atlas with temporary accounts and sessions. See [authentication flow, protections and verification limits](docs/AUTHENTICATION.md). Test fixtures are removed after checks.
 
-Forgot-password recovery is available from the sign-in page. It sends a one-use link that expires after 30 minutes, stores only a token digest, and revokes existing sessions after a successful reset. Render is configured to send through Gmail OAuth; an actual password-reset email has not yet been verified. See [authentication and recovery details](docs/AUTHENTICATION.md).
+Forgot-password recovery is available from the sign-in page. It sends a one-use link that expires after 30 minutes, stores only a token digest, and revokes existing sessions after a successful reset. Render sends through Gmail OAuth, and the user confirmed the live password-reset flow works on 2026-10-31. See [authentication and recovery details](docs/AUTHENTICATION.md).
 
 Run `pnpm verify:profile` for real profile-saving, ownership isolation and stale-edit checks against Atlas using temporary accounts. See [profile editor details](docs/PROFILE-EDITOR.md).
 
@@ -131,4 +131,4 @@ The complete PDF requirement matrix, acceptance checks, scope decisions and curr
 - [x] GitHub repository containing application source, tests and setup documentation
 - [x] Render Free HTTPS deployment: https://codefolio-meril.onrender.com
 - [x] Two permanent showcase profiles using distinct layouts: [Meril Gandhi](https://codefolio-meril.onrender.com/meril2203) and [Nisha Patel](https://codefolio-meril.onrender.com/nisha-patel-dev)
-- [ ] Complete production workflow review, including password-reset delivery and authenticated editor/plan/domain flows
+- [ ] Complete production workflow review, including authenticated editor/plan/domain flows

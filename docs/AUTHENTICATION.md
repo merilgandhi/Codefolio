@@ -33,7 +33,7 @@ All writes require JSON and `X-Codefolio-Request: 1`. Browser writes from disall
 
 Registration and login share an IP-based rate limit of 20 requests per 15 minutes. The limiter uses process memory: it resets on API restart and is not shared across replicas. Configure a shared limiter store before deploying multiple instances. Reference: [express-rate-limit](https://github.com/express-rate-limit/express-rate-limit).
 
-Password recovery shares a separate five-request-per-IP limit across requests and confirmations in a 15-minute window. The production Render service is configured with Gmail OAuth (`GMAIL_USER`, `GMAIL_CLIENT_ID`, `GMAIL_CLIENT_SECRET` and `GMAIL_REFRESH_TOKEN`); a real password-reset delivery has not yet been verified. Delivery failures are kept out of the public response to avoid disclosing whether an account exists; check server logs and Google OAuth settings if the link does not arrive. The in-memory limit is per process and resets on restart.
+Password recovery shares a separate five-request-per-IP limit across requests and confirmations in a 15-minute window. The production Render service is configured with Gmail OAuth (`GMAIL_USER`, `GMAIL_CLIENT_ID`, `GMAIL_CLIENT_SECRET` and `GMAIL_REFRESH_TOKEN`); on 2026-10-31 the user confirmed that the live password-reset flow works. Delivery failures are kept out of the public response to avoid disclosing whether an account exists; check server logs and Google OAuth settings if the link does not arrive. The in-memory limit is per process and resets on restart.
 
 If MongoDB is unavailable, account routes return 503 instead of buffering requests. Authentication responses use `Cache-Control: no-store`. Unexpected driver errors use the generic API error response and are not sent raw to clients.
 
@@ -61,6 +61,6 @@ Repeat `pnpm verify:auth` only against the intended development database. It cre
 
 ## Remaining work
 
-Profile, project, skills, template, plan and domain writes use the authenticated account on the server and have passed ownership or authorization checks. See the respective editor notes. Contact delivery through production Gmail OAuth has been confirmed once; password-reset delivery still needs an end-to-end check.
+Profile, project, skills, template, plan and domain writes use the authenticated account on the server and have passed ownership or authorization checks. See the respective editor notes. Production contact email and password-reset flows have been confirmed; authenticated editor, plan and domain flows still need a complete production walkthrough.
 
-No real production password-reset email has been verified yet. Signup email verification and multi-factor authentication are not implemented or explicitly requested in the project brief. Account email addresses are syntax-checked, not ownership-verified.
+Signup email verification and multi-factor authentication are not implemented or explicitly requested in the project brief. Account email addresses are syntax-checked, not ownership-verified.
