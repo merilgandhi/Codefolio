@@ -1,6 +1,6 @@
 # Public contact form and Gmail API delivery
 
-Both public portfolio layouts include a **Contact** navigation link and the same responsive React Hook Form contact section. Earlier SMTP-based checks confirmed the branded message arrived in Gmail. The deployed Render Free service uses a Gmail OAuth-over-HTTPS code path because SMTP is blocked, but production OAuth credentials and a delivery check have not been completed; production contact and password-reset email delivery remain unverified. Nodemailer composes the MIME email in both paths, and its stream transport hands the production message to Gmail's API.
+Both public portfolio layouts include a **Contact** navigation link and the same responsive React Hook Form contact section. Render Free uses Gmail OAuth over HTTPS because SMTP is blocked. Production OAuth is configured, and on 2026-10-31 one approved message submitted through the public `@meril2203` contact form was confirmed in Inbox. This verifies that delivery path once; it does not verify password-reset email delivery or guarantee future inbox placement. Nodemailer composes the MIME email in both paths, and its stream transport hands the production message to Gmail's API.
 
 ## Request flow and privacy
 
@@ -50,11 +50,11 @@ Never paste OAuth secrets or refresh tokens into chat or commit them. The setup 
 - A hidden honeypot silently drops filled submissions with a generic response. It supplements the limits; it is not an authentication mechanism.
 - Gmail token-refresh and HTTPS API timeouts bound stalled transport activity. The submit button and fields are disabled while sending. Failures keep the draft, while success clears it. A client timeout warns that delivery could not be confirmed rather than claiming definite failure.
 
-These counters use in-memory stores, so restarting the API resets them. A multi-instance deployment needs shared rate-limit storage and the correct trusted proxy configuration. Email ownership verification and guaranteed delivery receipts are outside this implementation; Gmail limits and filtering still apply. Earlier SMTP tests reached Inbox, but Gmail API delivery must be checked after OAuth is configured.
+These counters use in-memory stores, so restarting the API resets them. A multi-instance deployment needs shared rate-limit storage and the correct trusted proxy configuration. Email ownership verification and guaranteed delivery receipts are outside this implementation; Gmail limits and filtering still apply. One production Gmail API contact delivery was confirmed in Inbox on 2026-10-31. Password-reset delivery remains unverified.
 
 ## Earlier verification evidence
 
-The evidence below predates the Gmail API conversion. It records the existing form, templates and local SMTP behavior; it does not verify production OAuth delivery.
+The evidence below records the existing form, templates and local SMTP behavior. The final bullet records the later production OAuth delivery check.
 
 - **64 default tests pass**, including eight contact groups and four email-presentation groups: validation, TLS configuration, sender/envelope/Reply-To, two-owner recipient isolation, public response privacy, rejected unsafe requests, sanitized outages/failures, limits/honeypot, actual Nodemailer SMTP protocol success/rejection, escaped HTML, safe reply URLs, Unicode/long-message preservation and multipart HTML/text serialization. The SMTP fixture decodes the MIME text part before checking content.
 - Both renderer verification groups and the production build pass. Prettier checks pass.
@@ -62,8 +62,9 @@ The evidence below predates the Gmail API conversion. It records the existing fo
 - Empty submission shows four associated errors and focuses the name field. Valid submission clears the form; provider failure retains the message. A delayed submission disables Send until completion. A sixth request displays rate-limit feedback.
 - Locally captured messages used the correct first and second Atlas account's private email, with the visitor as Reply-To. No external email was sent by this browser QA helper.
 - Both temporary accounts and their sessions were removed by exact generated IDs; zero remaining counts were confirmed. The QA server stopped.
-- Gmail connection, TLS and authentication passed on port 587. After explicit user approval, exactly one real message went through `/api/contact/meril007` and was accepted by Gmail. The owner confirmed **Received in Inbox** in the chat.
+- Gmail connection, TLS and authentication passed on port 587. After explicit user approval, one real message went through `/api/contact/meril007` and was accepted by Gmail. The owner confirmed **Received in Inbox** in the chat.
 - After the email-design revision, one additional separately approved test used the same API and registered recipient. The owner confirmed **Received — looks good**, including the CodeFolio branding, message card and reply button. Browser previews and SMTP MIME tests passed; no new Atlas fixtures were needed for the presentation revision.
+- On 2026-10-31, one separately approved message was submitted through the deployed `@meril2203` contact form after Gmail OAuth was configured in Render. The form returned success, and the user confirmed the message appeared in Inbox. Password-reset delivery was not tested.
 
 ## Re-run commands
 
@@ -86,4 +87,4 @@ npm run verify:contact:delivery -- <username> --send
 
 That command sends one message to the selected account's stored email through the normal API. It requires the explicit `--send` flag. Check the registered inbox and confirm receipt separately; do not repeat automatically if a timeout leaves delivery uncertain.
 
-The subsequent [Pro tier/badge and premium-authorization milestone](PRO-ACCESS.md) is complete. The Pro-only domain feature is next. Deployed email verification remains part of the final production workflow review.
+The [Pro tier/badge and premium-authorization milestone](PRO-ACCESS.md) and the Pro-only domain feature are complete. Contact email delivery has one production Inbox confirmation; password-reset delivery and the broader production workflow review remain open.
