@@ -124,9 +124,11 @@ The complete PDF requirement matrix, acceptance checks, scope decisions and curr
 - [x] Unsaved live preview for profile, projects, skills and template selection
 - [x] React Helmet SEO with server document and client navigation verification
 - [x] Local responsive, accessibility and image-loading polish
-- [x] Contact email flow and branded templates; production Gmail OAuth setup is pending
+- [x] Contact email flow and branded templates; production Gmail OAuth setup remains pending
 - [x] Pro badge, operator tier assignment and server-enforced premium authorization
 - [x] Pro-only domain simulation
 - [x] System design note explaining public username routing
 - [x] GitHub repository containing application source, tests and setup documentation
-- [ ] Deployment and permanent showcase profiles
+- [x] Render Free HTTPS deployment: https://codefolio-meril.onrender.com
+- [x] Two permanent showcase profiles using distinct layouts: [Meril Gandhi](https://codefolio-meril.onrender.com/meril2203) and [Nisha Patel](https://codefolio-meril.onrender.com/nisha-patel-dev)
+- [ ] Complete production workflow review, including Gmail OAuth email delivery

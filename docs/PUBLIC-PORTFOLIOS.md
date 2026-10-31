@@ -1,6 +1,6 @@
 # Public portfolios and username routing
 
-Implemented locally on 2026-10-24. Run `npm run dev`, then open `http://127.0.0.1:5174/<username>` or use **Open public portfolio** in the dashboard. Saved profile, projects, skills and layout are public immediately. These are local URLs until the deployment milestone.
+Implemented locally on 2026-10-24. Run `npm run dev`, then open `http://127.0.0.1:5174/<username>` or use **Open public portfolio** in the dashboard. Saved profile, projects, skills and layout are public immediately. Production is deployed at `https://codefolio-meril.onrender.com`; the permanent showcase portfolios are `/meril2203` and `/nisha-patel-dev`.
 
 ## Request flow and system design
 
@@ -33,6 +33,6 @@ The [Pro custom-domain simulation](CUSTOM-DOMAINS.md) adds `GET /api/domains/:do
 - `npm run verify:rendering`: both compiled templates, all required fields, legacy/default fallback and embedded headings pass.
 - `npm run verify:public`: requires Atlas and a running Vite development server, plus a current build. Creates exactly two uniquely identified temporary accounts and removes those IDs and their sessions in `finally`. Checks production documents/assets, anonymous JSON, Vite forwarding, saved profile/template changes, account isolation, redirects, 404s, unavailability and privacy.
 
-The optional `--browser` argument keeps those same two fixtures alive for browser checks until `.public-qa-control` contains `cleanup`; `unavailable` and `available` simulate API availability only on that temporary server. No credentials are written to the control file. Temporary fixtures are not the two permanent showcase profiles required for submission.
+The optional `--browser` argument keeps those same two fixtures alive for browser checks until `.public-qa-control` contains `cleanup`; `unavailable` and `available` simulate API availability only on that temporary server. No credentials are written to the control file. Temporary fixtures are separate from the permanent showcase profiles linked above.
 
-Browser verification covers both public layouts, desktop and 390px widths, light/dark controls, internal section links, direct development visits and aliases. SEO has separate [verification evidence](SEO.md). The subsequent [local responsive, accessibility and image review](RESPONSIVE-ACCESSIBILITY.md) and [Nodemailer contact milestone](CONTACT-EMAIL.md) are complete. Final deployment, premium features and deployed verification remain pending.
+Browser verification covers both public layouts, desktop and 390px widths, light/dark controls, internal section links, direct development visits and aliases. SEO has separate [verification evidence](SEO.md). The subsequent [local responsive, accessibility and image review](RESPONSIVE-ACCESSIBILITY.md) and [Nodemailer contact milestone](CONTACT-EMAIL.md) are complete. Production deployment and premium features are implemented; full deployed workflow verification remains pending.

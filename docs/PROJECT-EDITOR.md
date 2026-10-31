@@ -33,9 +33,9 @@ All endpoints require active sessions and use no-store responses. Writes require
 
 Do not treat a build or offline test as proof of real Atlas persistence. Record integration/browser results and any connectivity blocker in the requirements tracker.
 
-## Next task
+## Scope boundary
 
-Categorized skills editor: Frontend, Backend and DevOps arrays, with database saving, validation and ownership checks. It is not implemented by this milestone.
+This milestone covers project editing. Categorized skills are implemented separately; see [SKILLS-EDITOR.md](SKILLS-EDITOR.md).
 
 ## Current results
 
@@ -43,4 +43,4 @@ The 28 default backend tests and production build pass. The earlier TLS blocker 
 
 Browser checks with a separate disposable account passed for full-field creation, validation of duplicate technologies/unsafe URLs, screenshot loading, refresh persistence, editing, broken-image fallback, keep/discard behavior, section-switch confirmation, deletion cancellation and confirmed deletion followed by refresh. Project cards were reviewed at desktop and 390px width. The temporary account, sessions and screenshot asset were removed. The user's existing account and session were preserved.
 
-This completes the project editor task. Public portfolio rendering remains a separate template-engine milestone; the categorized skills editor is next and requires the user's command.
+This completes the project editor milestone. Public portfolio rendering and categorized skills are documented in their own implementation notes.

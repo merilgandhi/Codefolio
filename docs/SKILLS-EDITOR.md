@@ -31,6 +31,6 @@ The category counters and tags show the current inputs, including unsaved change
 
 Run `pnpm verify:skills` only against the intended development database. It creates uniquely identified temporary accounts, adds declared indexes without dropping existing indexes, and removes only its generated IDs and sessions. Credentials, session tokens and raw database errors are not printed.
 
-## Next task
+## Scope boundary
 
-Implement the template engine with two distinct portfolio layouts, selected by User.templateId with a default fallback, and add template selection to the dashboard. Public username routing and showcase profiles follow. No template implementation was started in this task.
+This milestone covers categorized skills editing. Template selection and public portfolio rendering are implemented separately; see [TEMPLATE-SELECTION.md](TEMPLATE-SELECTION.md) and [PUBLIC-PORTFOLIOS.md](PUBLIC-PORTFOLIOS.md).

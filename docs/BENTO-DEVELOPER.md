@@ -6,7 +6,7 @@ The user selected **Bento Developer** and **Split-Screen Engineer** on 2026-10-2
 
 Run `npm run dev` (or `pnpm dev`), sign in, open **Templates**, choose **Bento Developer**, then **Save template**. **Portfolio preview** at `http://127.0.0.1:5174/dashboard?section=preview` follows the saved choice.
 
-Save edits in Profile, Projects, or Skills before opening the preview. It loads fresh saved content on entry; **Refresh preview** reloads it explicitly. This is a private preview of saved content. Unsaved, side-by-side live preview is still pending.
+Save edits in Profile, Projects, or Skills before opening the saved-content preview. It loads fresh saved content on entry; **Refresh preview** reloads it explicitly. The optional live preview can also render unsaved profile, project, skill, and layout drafts beside the editor.
 
 ## Layout
 
@@ -35,4 +35,4 @@ The endpoint is read-only. The existing editor section-switch confirmation also 
 
 ## Remaining work
 
-Both layouts, the shared registry/default fallback and persisted dashboard selector are implemented. Canonical IDs are `bento` and `split-screen`; old values resolve compatibly without forced record updates. Public username routing, React Helmet metadata, unsaved live preview, contact email, Pro badge, domain simulation and deployment remain tracked separately in `REQUIREMENTS.md`.
+Both layouts, the shared registry/default fallback and persisted dashboard selector are implemented. Canonical IDs are `bento` and `split-screen`; old values resolve compatibly without forced record updates. Public username routing, React Helmet metadata, live preview, contact email, Pro badge, domain simulation and deployment status are tracked in `REQUIREMENTS.md`.

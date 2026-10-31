@@ -61,6 +61,6 @@ Repeat `pnpm verify:auth` only against the intended development database. It cre
 
 ## Remaining work
 
-Profile, project and skills editors use the authenticated account ID on the server and have passed two-account edit-isolation checks. See their respective editor notes. Ownership for future template/domain operations must also be enforced as those endpoints are introduced.
+Profile, project, skills, template, plan and domain writes use the authenticated account on the server and have passed ownership or authorization checks. See the respective editor notes. Production password-reset delivery remains unverified until Gmail OAuth is configured.
 
 No real production password-reset email has been verified yet. Signup email verification and multi-factor authentication are not implemented or explicitly requested in the project brief. Account email addresses are syntax-checked, not ownership-verified.

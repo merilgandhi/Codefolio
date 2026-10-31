@@ -15,4 +15,4 @@ The production build and Prettier check pass. Browser review with authorized dis
 
 Ten measurements cover 320/390/768/1024/1440px widths in both modes, without horizontal overflow. Mobile navigation, automatic collapse after selection, Escape, dirty sign-out focus, and the longer Free Upgrade label at 320px were checked. Desktop light and mobile dark screenshots were reviewed. Test-only plan changes affected only one fixture; exactly the two generated accounts and their sessions were removed, and the helper stopped. The real user's plan, portfolio and session were preserved.
 
-This changes dashboard navigation only. The remaining GitHub, deployment, showcase-profile and final deployed-audit tasks are unchanged.
+GitHub publication, production deployment, and the two showcase profiles are complete. The final deployed workflow audit remains pending.

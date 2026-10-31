@@ -1,6 +1,6 @@
 # Public contact form and Gmail API delivery
 
-Both public portfolio layouts include a **Contact** navigation link and the same responsive React Hook Form contact section. Earlier SMTP-based checks confirmed the branded message arrived in Gmail. Production now uses Gmail OAuth over HTTPS because Render Free blocks SMTP; OAuth credentials and a production inbox check are still pending. Nodemailer composes the MIME email in both paths, and its stream transport hands the production message to Gmail's API.
+Both public portfolio layouts include a **Contact** navigation link and the same responsive React Hook Form contact section. Earlier SMTP-based checks confirmed the branded message arrived in Gmail. The deployed Render Free service uses a Gmail OAuth-over-HTTPS code path because SMTP is blocked, but production OAuth credentials and a delivery check have not been completed; production contact and password-reset email delivery remain unverified. Nodemailer composes the MIME email in both paths, and its stream transport hands the production message to Gmail's API.
 
 ## Request flow and privacy
 

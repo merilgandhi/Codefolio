@@ -61,4 +61,4 @@ The opt-in integration command creates exactly two temporary accounts and remove
 
 ## Remaining limits
 
-Portfolio body markup is rendered by the client; the initial document contains the metadata and public-data bootstrap. This milestone does not add full body server rendering, social preview images, sitemap generation or a canonical-domain policy. Metadata does not guarantee search rankings or actual indexing. Deployed HTTPS responses and crawler behavior still need verification after deployment. The subsequent local [responsive, accessibility and image-loading review](RESPONSIVE-ACCESSIBILITY.md) is complete.
+Portfolio body markup is rendered by the client; the initial document contains the metadata and public-data bootstrap. This milestone does not add full body server rendering, social preview images, sitemap generation or a canonical-domain policy. Metadata does not guarantee search rankings or actual indexing. Production HTTPS metadata and crawler behavior still need verification. The subsequent local [responsive, accessibility and image-loading review](RESPONSIVE-ACCESSIBILITY.md) is complete.

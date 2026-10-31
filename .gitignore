@@ -5,11 +5,6 @@ dist/
 !.env.example
 *.log
 coverage/
-.template-qa-control
-.public-qa-control
-.live-preview-qa-control
-.seo-qa-control
-.polish-qa-control
 artifacts/
 .codex/
 .agents/

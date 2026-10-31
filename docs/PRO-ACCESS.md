@@ -74,4 +74,4 @@ npm run verify:plans
 
 The ignored `.polish-qa-control` file accepts `plan-promote-a`, `plan-demote-a`, `plan-promote-b`, `plan-demote-b` and the existing visual-fixture commands. Wait for `PLAN_READY`, then refresh the plan or public page. Finish with `cleanup` so the helper verifies record removal and exits. Ctrl+C also triggers cleanup.
 
-The Pro-only domain simulation is now verified locally; see [domain workflow and checks](CUSTOM-DOMAINS.md). Deployment/HTTPS verification remains pending.
+The Pro-only domain simulation is verified locally; see [domain workflow and checks](CUSTOM-DOMAINS.md). The app is deployed over HTTPS, but production plan changes and domain redirects still need an end-to-end check.

@@ -36,6 +36,6 @@ The renderer verification script uses a separate Vite dependency cache so runnin
 - Scoped Atlas/public-API checks confirmed unsaved drafts did not change public data, and successful profile, project, skill and template saves did. No existing user account was edited.
 - Both color modes were reviewed; desktop 1440px and mobile 390px showed no horizontal page overflow. The preview canvas excluded the private account email. Browser error logs were empty.
 
-Verification ended successfully: the disposable account and its sessions were removed, and the temporary QA server was stopped. Existing user data was unchanged. Deployment, React Helmet SEO and the complete public image/accessibility audit remain separate milestones.
+Verification ended successfully: the disposable account and its sessions were removed, and the temporary QA server was stopped. Existing user data was unchanged. Deployment, React Helmet SEO and the local public image/accessibility review are complete; production workflow verification remains a separate milestone.
 
 The subsequent visual revision restored the original dashboard layout and made live preview optional. Browser checks confirmed the preview is absent on a fresh visit, Show/Hide preserves a draft, restoring a field disables Save again, reload keeps the original default, and mobile switching works without horizontal overflow. The shared warm neutral/violet palette was reviewed in both modes. No saved portfolio data was changed during these appearance checks.

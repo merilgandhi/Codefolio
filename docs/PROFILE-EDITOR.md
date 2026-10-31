@@ -30,6 +30,6 @@ On 2026-10-21:
 
 Run `pnpm verify:profile` only against the intended development database. It creates two uniquely identified temporary accounts, adds declared indexes without dropping existing indexes, and removes only its generated account IDs and sessions. Passwords, Atlas credentials and raw driver errors are not printed.
 
-## Next task
+## Scope boundary
 
-Project editor: title, description, technology array, repository link, live link and screenshot URL, with create/edit/delete, Atlas persistence and ownership checks. This is not implemented by the profile milestone.
+This milestone covers profile editing. Project editing is implemented separately; see [PROJECT-EDITOR.md](PROJECT-EDITOR.md).

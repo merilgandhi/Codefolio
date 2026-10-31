@@ -30,6 +30,6 @@ Both layouts preview saved content. **Refresh preview** explicitly reloads saved
 - Section links target existing unique IDs; screenshots load or fall back correctly; outbound-link attributes pass inspection; browser logs show no errors or warnings.
 - Backend behavior and the data schema were unchanged. Prior 32-test backend and Atlas preview checks remain recorded in `BENTO-DEVELOPER.md`; they were not rerun for this presentation-only step.
 
-## Next task
+## Scope boundary
 
-The shared registry, default fallback and persisted dashboard selector are complete, with compatibility for existing accounts. Next implement public username URLs. React Helmet metadata, unsaved content preview and remaining internship deliverables are separate tracked tasks.
+This milestone covers the Split-Screen Engineer layout. Template selection, public username URLs, metadata, live preview and remaining internship deliverables are documented in their own implementation notes and in `REQUIREMENTS.md`.

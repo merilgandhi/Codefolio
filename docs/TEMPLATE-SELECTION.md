@@ -50,6 +50,6 @@ Both endpoints require a valid session and database connection and send `Cache-C
 
 For optional interactive checks, `node server/scripts/verify-templates.js --browser` holds the two fixtures after the API checks. It prints disposable login details only in that explicit mode and creates `.template-qa-control`. Write `conflict`, `unknown`, a canonical/legacy ID, or `expire` into that file to affect only the first generated fixture; write `cleanup` to finish and remove both accounts/sessions. Normal `verify:templates` needs no browser/control file and cleans up automatically. Do not interrupt an active fixture run without completing its cleanup.
 
-## Next task
+## Scope boundary
 
-Public `/:username` routing and unsaved live previews are complete locally. React Helmet SEO is the next milestone; the remaining internship deliverables are tracked in `REQUIREMENTS.md`.
+This milestone covers saved template selection and fallback behavior. Public routing, live preview, SEO and remaining internship requirements are documented separately in `REQUIREMENTS.md`.
