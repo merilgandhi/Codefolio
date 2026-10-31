@@ -11,8 +11,8 @@ try {
     production: config.production,
     origins: config.origins,
     trustProxy: config.trustProxy,
-  }).listen(config.port, '127.0.0.1', () => {
-    console.info(`CodeFolio API: http://127.0.0.1:${config.port}`);
+  }).listen(config.port, config.host, () => {
+    console.info(`CodeFolio server listening on ${config.host}:${config.port}`);
   });
   server.on('error', () => {
     console.error('Could not start the API. Check whether PORT is already in use.');

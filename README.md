@@ -50,7 +50,7 @@ pnpm build
 
 `npm run build` also works. Its Node launcher explicitly selects production mode for the frontend build, even when the local `.env` selects development for Express. This prevents shipping React's development runtime.
 
-For production, set `NODE_ENV=production` and an HTTPS `APP_ORIGIN`, build, then run `pnpm start` behind the configured HTTPS reverse proxy. Production cookies require HTTPS. Express serves `dist` and handles frontend refreshes. The initial server binds to loopback for local development; hosting configuration will be added in the deployment milestone.
+For production, set `NODE_ENV=production` and an HTTPS `APP_ORIGIN`, build, then run `pnpm start` behind the configured HTTPS reverse proxy. Production cookies require HTTPS. Express serves `dist` and handles frontend refreshes. It binds to `0.0.0.0` in production and `127.0.0.1` in development unless `HOST` is set explicitly. See the [Koyeb production deployment guide](docs/DEPLOYMENT.md) for the selected host configuration, secrets, Atlas networking and acceptance checks.
 
 To verify the configured Atlas database with temporary records, run `pnpm verify:db`. This checks real writes, reads in a separate process, unique indexes, private-field query exclusions and stale-save rejection, then removes only the generated test records. It is separate from the default tests. See [database verification details](docs/DATA-MODEL.md).
 

@@ -35,10 +35,12 @@ If MongoDB is unavailable, account routes return 503 instead of buffering reques
 
 - Local development accepts `http://127.0.0.1:5174` and `http://localhost:5174` unless APP_ORIGIN is supplied.
 - Set `APP_ORIGIN` to the actual HTTPS website origin for production. Production startup rejects a missing/non-HTTPS origin.
+- The server binds to `0.0.0.0` in production so a hosting proxy can reach it. Development defaults to `127.0.0.1`; `HOST` can override either value.
 - Cookies use Secure in production. Therefore production login requires HTTPS; a plain HTTP production preview will not preserve the cookie in a normal browser.
 - `TRUST_PROXY=1` supports one trusted reverse proxy. Leave it disabled locally and verify the deployment topology before enabling it. Do not expose the application directly while blindly trusting arbitrary forwarded headers.
 - Application startup awaits User and Session indexes when a database is configured. Unique indexes enforce account identity and TTL indexes clean up sessions.
 - Atlas credentials remain in local `.env`, never frontend code, tracked files or test output.
+- The selected Koyeb configuration and deployed acceptance steps are documented in [DEPLOYMENT.md](DEPLOYMENT.md).
 
 ## Verification completed
 

@@ -5,10 +5,14 @@ if (!Number.isInteger(port) || port < 1 || port > 65535) {
   throw new Error('PORT must be an integer between 1 and 65535.');
 }
 
+const production = process.env.NODE_ENV === 'production';
+const host = process.env.HOST?.trim() || (production ? '0.0.0.0' : '127.0.0.1');
+
 export const config = {
+  host,
   port,
   mongodbUri: process.env.MONGODB_URI?.trim() || '',
-  production: process.env.NODE_ENV === 'production',
+  production,
   origins: process.env.APP_ORIGIN
     ? [new URL(process.env.APP_ORIGIN).origin]
     : ['http://127.0.0.1:5174', 'http://localhost:5174'],
