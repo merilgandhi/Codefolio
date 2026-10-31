@@ -3,11 +3,15 @@ import { Link } from 'react-router-dom';
 import { useAuth } from './auth/AuthContext.jsx';
 import ThemeToggle from './components/ThemeToggle.jsx';
 
-const milestones = [
-  ['01', 'The foundation', 'React, Express, and database configuration.', 'Complete'],
-  ['02', 'Your workspace', 'Accounts are ready. Portfolio editing comes next.', 'Current step'],
-  ['03', 'Your portfolio', 'Distinct templates and a link to call your own.', 'Planned'],
-  ['04', 'The finishing touches', 'Live preview, search visibility, and contact email.', 'Planned'],
+const features = [
+  ['01', 'Tell your story', 'Add your introduction, résumé link, and professional profiles.'],
+  ['02', 'Show your work', 'Present projects with their descriptions, technologies, and links.'],
+  ['03', 'Choose your style', 'Pick Bento Developer or Split-Screen Engineer for your portfolio.'],
+  [
+    '04',
+    'Preview and share',
+    'Review draft changes, save your work, and share your public portfolio link.',
+  ],
 ];
 
 export default function Home() {
@@ -96,22 +100,23 @@ export default function Home() {
               <br />a <span>great home.</span>
             </h1>
             <p>
-              Your projects, your skills, your story. We’re building a simpler way to turn what you
-              do into a portfolio you’re proud to share.
+              Create a polished developer portfolio without building a website from scratch. Bring
+              your profile, projects, and skills together, then publish a page that’s ready to
+              share.
             </p>
             <a
               className="mt-[30px] mb-[15px] inline-flex items-center gap-[35px] rounded-[7px] bg-action px-[21px] py-[15px] text-xs font-semibold text-action-ink hover:bg-action-hover [&>span]:text-[19px]"
               href="#build-plan"
             >
-              Explore the build plan <span aria-hidden="true">↗</span>
+              Explore the features <span aria-hidden="true">↗</span>
             </a>
             <span className="block text-[10px] text-quiet">
-              Step by step. From your first project to your own URL.
+              From your workspace to a public portfolio link.
             </span>
           </div>
           <div
             className="relative rotate-1 rounded-[20px] bg-[radial-gradient(ellipse_at_60%_50%,var(--color-glow),var(--color-soft)_75%)] px-[25px] pt-[34px] pb-[35px] max-[900px]:px-[15px] max-[900px]:py-[25px] max-sm:mx-auto max-sm:w-[95%] max-sm:max-w-[390px] max-sm:p-[25px]"
-            aria-label="Illustration of a future portfolio template"
+            aria-label="Illustrative portfolio concept, not an active profile"
           >
             <span className="mb-5 block text-center text-[8px] tracking-[2px] text-quiet">
               THE POSSIBILITIES, IN PREVIEW
@@ -175,28 +180,26 @@ export default function Home() {
           <div className="mb-7 flex items-center justify-between max-sm:items-start max-sm:gap-5 [&_h2]:mt-[9px] [&_h2]:font-display [&_h2]:text-[25px] [&_h2]:font-semibold [&_h2]:tracking-[-1px] max-sm:[&_h2]:text-[23px] [&>p]:text-[11px] [&>p]:leading-[1.8] [&>p]:text-quiet max-sm:[&>p]:hidden">
             <div>
               <span className="text-[10px] font-bold tracking-[1.8px] text-muted">
-                THE ROAD AHEAD
+                YOUR PORTFOLIO, YOUR WAY
               </span>
-              <h2 id="build-title">One solid step at a time.</h2>
+              <h2 id="build-title">Everything you need to present your work.</h2>
             </div>
             <p>
-              A working foundation first.
+              One focused workspace for your profile, projects, and skills.
               <br />
-              The rest grows from here.
+              Choose a layout, preview, and publish.
             </p>
           </div>
           <div className="grid grid-cols-4 gap-3 max-sm:grid-cols-2">
-            {milestones.map(([number, title, description, status], index) => (
+            {features.map(([number, title, description]) => (
               <article
                 key={number}
-                className={`rounded-[9px] border p-5 max-[900px]:p-[15px] [&>h3]:mb-[9px] [&>h3]:text-[13px] [&>h3]:font-semibold [&>p]:text-[11px] [&>p]:leading-[1.8] [&>p]:text-quiet ${index === 1 ? 'border-line-accent bg-soft' : 'border-line bg-subtle'}`}
+                className="rounded-[9px] border border-line bg-subtle p-5 max-[900px]:p-[15px] [&>h3]:mb-[9px] [&>h3]:text-[13px] [&>h3]:font-semibold [&>p]:text-[11px] [&>p]:leading-[1.8] [&>p]:text-quiet"
               >
                 <div className="mb-[26px] flex items-center justify-between text-xs text-quiet">
                   <span>{number}</span>
-                  <span
-                    className={`rounded-full border px-[7px] py-1 text-[8px] ${index === 1 ? 'border-line-accent bg-chip text-success' : 'border-line-soft'}`}
-                  >
-                    {status}
+                  <span className="rounded-full border border-line-soft px-[7px] py-1 text-[8px]">
+                    Included
                   </span>
                 </div>
                 <h3>{title}</h3>
@@ -242,7 +245,7 @@ export default function Home() {
       <footer className="flex justify-between border-t border-line-soft pt-[22px] pb-7 text-[10px] text-quiet max-sm:flex-wrap max-sm:gap-[15px] max-sm:text-[9px] max-sm:[&>span:nth-child(2)]:hidden">
         <span>CodeFolio © {new Date().getFullYear()}</span>
         <span>A place for what you build.</span>
-        <span>Foundation / v0.1</span>
+        <span>Build it. Preview it. Share it.</span>
       </footer>
     </div>
   );
