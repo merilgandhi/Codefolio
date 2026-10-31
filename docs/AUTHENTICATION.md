@@ -11,23 +11,29 @@
 7. Logging in again replaces the presented session token and revokes that previous session. Other independent sessions are not revoked.
 8. `/dashboard` waits for the server's session check. Anonymous visitors go to login; connectivity failures display retry rather than falsely treating the visitor as logged out. Its starting page displays only the current account's identity and offers logout.
 9. Logout deletes the presented server-side session and clears the cookie. It can be repeated safely.
+10. `/forgot-password` always returns the same confirmation for valid-shaped addresses. Existing accounts receive a reset link by Nodemailer; unknown addresses do not reveal account status.
+11. Reset links contain a cryptographically random token in the URL fragment. MongoDB stores only its SHA-256 digest, with a 30-minute expiry and one active link per account. `/reset-password` accepts the token once, updates the scrypt password hash, removes all sessions, and invalidates any other reset links.
 
 Node API reference: [scrypt and timing-safe comparisons](https://nodejs.org/api/crypto.html).
 
 ## API contract
 
-| Endpoint                  | Input                                         | Success                                 | Expected errors                           |
-| ------------------------- | --------------------------------------------- | --------------------------------------- | ----------------------------------------- |
-| POST `/api/auth/register` | name, username, email, password               | 201 with safe account fields            | 400 invalid fields, 409 duplicate account |
-| POST `/api/auth/login`    | email, password                               | 200 with safe account fields and cookie | 401 generic invalid credentials           |
-| GET `/api/auth/me`        | session cookie                                | 200 with current account                | 401 missing/invalid/expired session       |
-| POST `/api/auth/logout`   | empty JSON object and optional session cookie | 204                                     | Database/request protection errors        |
+| Endpoint                                | Input                                         | Success                                 | Expected errors                                       |
+| --------------------------------------- | --------------------------------------------- | --------------------------------------- | ----------------------------------------------------- |
+| POST `/api/auth/register`               | name, username, email, password               | 201 with safe account fields            | 400 invalid fields, 409 duplicate account             |
+| POST `/api/auth/login`                  | email, password                               | 200 with safe account fields and cookie | 401 generic invalid credentials                       |
+| POST `/api/auth/password-reset/request` | email                                         | 202 generic confirmation                | 400 invalid email, 429 rate limit                     |
+| POST `/api/auth/password-reset/confirm` | token, password                               | 200 after one-time reset                | 400 invalid/expired token or password, 429 rate limit |
+| GET `/api/auth/me`                      | session cookie                                | 200 with current account                | 401 missing/invalid/expired session                   |
+| POST `/api/auth/logout`                 | empty JSON object and optional session cookie | 204                                     | Database/request protection errors                    |
 
 Safe authenticated account fields: id, username, private account email, name, tier, templateId. This is a private account response, not the public portfolio serializer. Password hashes never appear in API responses.
 
 All writes require JSON and `X-Codefolio-Request: 1`. Browser writes from disallowed Origins or marked cross-site are rejected. This custom header requires a cross-origin preflight; the app deliberately does not grant cross-origin CORS permissions. Keep frontend and API on the same origin in production, or explicitly redesign these protections if the deployment architecture changes. Development uses Vite's `/api` proxy.
 
 Registration and login share an IP-based rate limit of 20 requests per 15 minutes. The limiter uses process memory: it resets on API restart and is not shared across replicas. Configure a shared limiter store before deploying multiple instances. Reference: [express-rate-limit](https://github.com/express-rate-limit/express-rate-limit).
+
+Password recovery shares a separate five-request-per-IP limit across requests and confirmations in a 15-minute window. It requires the existing SMTP configuration (`SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` and an allowed `SMTP_FROM`). Delivery failures are kept out of the public response to avoid disclosing whether an account exists; check server logs and provider configuration if the link does not arrive. The in-memory limit is per process and resets on restart.
 
 If MongoDB is unavailable, account routes return 503 instead of buffering requests. Authentication responses use `Cache-Control: no-store`. Unexpected driver errors use the generic API error response and are not sent raw to clients.
 
@@ -38,7 +44,7 @@ If MongoDB is unavailable, account routes return 503 instead of buffering reques
 - The server binds to `0.0.0.0` in production so a hosting proxy can reach it. Development defaults to `127.0.0.1`; `HOST` can override either value.
 - Cookies use Secure in production. Therefore production login requires HTTPS; a plain HTTP production preview will not preserve the cookie in a normal browser.
 - `TRUST_PROXY=1` supports one trusted reverse proxy. Leave it disabled locally and verify the deployment topology before enabling it. Do not expose the application directly while blindly trusting arbitrary forwarded headers.
-- Application startup awaits User and Session indexes when a database is configured. Unique indexes enforce account identity and TTL indexes clean up sessions.
+- Application startup awaits User, Session and PasswordResetToken indexes when a database is configured. Unique indexes enforce account identity and reset-token ownership; TTL indexes clean up sessions and expired reset links.
 - Atlas credentials remain in local `.env`, never frontend code, tracked files or test output.
 - The selected Render configuration and deployed acceptance steps are documented in [DEPLOYMENT.md](DEPLOYMENT.md).
 
@@ -57,4 +63,4 @@ Repeat `pnpm verify:auth` only against the intended development database. It cre
 
 Profile, project and skills editors use the authenticated account ID on the server and have passed two-account edit-isolation checks. See their respective editor notes. Ownership for future template/domain operations must also be enforced as those endpoints are introduced.
 
-No real production HTTPS deployment has been verified. Signup email verification, password recovery and multi-factor authentication are not implemented or explicitly requested in the project brief. Account email addresses are syntax-checked, not ownership-verified.
+No real production password-reset email has been verified yet. Signup email verification and multi-factor authentication are not implemented or explicitly requested in the project brief. Account email addresses are syntax-checked, not ownership-verified.

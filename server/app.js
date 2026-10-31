@@ -48,7 +48,10 @@ export function createApp({
     response.json({ status: 'ok', service: 'codefolio-api', database: getDatabaseStatus() });
   });
 
-  app.use('/api/auth', createAuthRouter({ production, origins, getDatabaseStatus }));
+  app.use(
+    '/api/auth',
+    createAuthRouter({ production, origins, getDatabaseStatus, mailer: contactMailer }),
+  );
   app.use('/api/profile', createProfileRouter({ production, origins, getDatabaseStatus }));
   app.use('/api/projects', createProjectsRouter({ production, origins, getDatabaseStatus }));
   app.use('/api/skills', createSkillsRouter({ production, origins, getDatabaseStatus }));
@@ -85,13 +88,17 @@ export function createApp({
     app.use(express.static(dist, { index: false }));
   }
 
-  app.get(['/', '/login', '/register', '/dashboard'], async (request, response) => {
-    if (!production) response.removeHeader('Content-Security-Policy');
-    response
-      .set('Cache-Control', 'no-store')
-      .type('html')
-      .send(withDocumentMetadata(await getFrontendHtml(), routeMetadata(request.path)));
-  });
+  app.get(
+    ['/', '/login', '/register', '/forgot-password', '/reset-password', '/dashboard'],
+    async (request, response) => {
+      if (!production) response.removeHeader('Content-Security-Policy');
+      response.set('Cache-Control', 'no-store');
+      if (request.path === '/reset-password') response.set('Referrer-Policy', 'no-referrer');
+      response
+        .type('html')
+        .send(withDocumentMetadata(await getFrontendHtml(), routeMetadata(request.path)));
+    },
+  );
   const publicDocument = createPublicDocumentHandler({ lookup, getFrontendHtml, production });
   app.get('/user/:username', publicDocument);
   app.get('/:username', publicDocument);

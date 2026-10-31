@@ -3,10 +3,12 @@ import { config } from './config.js';
 import { connectDatabase, disconnectDatabase } from './db.js';
 import { User } from './models/User.js';
 import { Session } from './models/Session.js';
+import { PasswordResetToken } from './models/PasswordResetToken.js';
 
 try {
   await connectDatabase(config.mongodbUri);
-  if (config.mongodbUri) await Promise.all([User.init(), Session.init()]);
+  if (config.mongodbUri)
+    await Promise.all([User.init(), Session.init(), PasswordResetToken.init()]);
   const server = createApp({
     production: config.production,
     origins: config.origins,

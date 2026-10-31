@@ -56,6 +56,8 @@ To verify the configured Atlas database with temporary records, run `pnpm verify
 
 Run `pnpm verify:auth` for opt-in authentication integration checks against Atlas with temporary accounts and sessions. See [authentication flow, protections and verification limits](docs/AUTHENTICATION.md). Test fixtures are removed after checks.
 
+Forgot-password recovery is available from the sign-in page. It sends a one-use link that expires after 30 minutes, stores only a token digest, and revokes existing sessions after a successful reset. Configure the production SMTP sender before relying on account recovery; see [authentication and recovery details](docs/AUTHENTICATION.md).
+
 Run `pnpm verify:profile` for real profile-saving, ownership isolation and stale-edit checks against Atlas using temporary accounts. See [profile editor details](docs/PROFILE-EDITOR.md).
 
 Run `pnpm verify:projects` for real project CRUD, ownership, concurrency, limits and persistence checks against Atlas. See [project editor details](docs/PROJECT-EDITOR.md). These checks remove their temporary fixture accounts and sessions.

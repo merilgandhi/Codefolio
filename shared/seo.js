@@ -59,6 +59,8 @@ export function routeMetadata(pathname) {
   const accountTitles = {
     '/login': 'Sign in',
     '/register': 'Create an account',
+    '/forgot-password': 'Reset your password',
+    '/reset-password': 'Choose a new password',
     '/dashboard': 'Your workspace',
   };
   if (Object.hasOwn(accountTitles, path))

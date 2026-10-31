@@ -45,8 +45,9 @@ After the HTTPS service is healthy:
 3. Profile, project, skill and template edits persist after a fresh login.
 4. Both showcase URLs render their intended layouts anonymously.
 5. A contact form message reaches the verified owner inbox using Resend SMTP.
-6. Direct visits to `/dashboard`, `/:username` and `/user/:username` work.
-7. Desktop/mobile layouts and both color modes work.
+6. A password-reset request reaches the registered account inbox; the one-use link updates the password and invalidates existing sessions.
+7. Direct visits to `/dashboard`, `/forgot-password`, `/reset-password`, `/:username` and `/user/:username` work.
+8. Desktop/mobile layouts and both color modes work.
 
 Only after these checks pass should requirement L01 be marked verified. The two permanent showcase profiles and their public URLs complete L02.
 

@@ -234,6 +234,16 @@ export default function AuthPage({ mode }) {
                   ? 'Use 12–128 characters. A long, unique passphrase works well.'
                   : 'Use the password you chose when creating your account.'}
               </p>
+              {!registration && (
+                <p className="text-right text-xs">
+                  <Link
+                    to="/forgot-password"
+                    className="font-semibold text-success underline underline-offset-4"
+                  >
+                    Forgot your password?
+                  </Link>
+                </p>
+              )}
               {registration && (
                 <Field
                   label="Confirm password"

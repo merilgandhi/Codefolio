@@ -3,6 +3,7 @@ import { rateLimit } from 'express-rate-limit';
 import { randomBytes } from 'node:crypto';
 import { User } from '../models/User.js';
 import { Session } from '../models/Session.js';
+import { PasswordResetToken } from '../models/PasswordResetToken.js';
 import { noStore, protectWrites, requireDatabase } from '../middleware/accountApi.js';
 import { isEmail, isUsername } from '../validation/portfolio.js';
 import { hashPassword, validPassword, verifyPassword } from '../auth/passwords.js';
@@ -34,7 +35,7 @@ function registrationInput(body) {
   return { fields, name, username, email, password: input.password };
 }
 
-export function createAuthRouter({ production, origins, getDatabaseStatus }) {
+export function createAuthRouter({ production, origins, getDatabaseStatus, mailer }) {
   const router = Router();
   router.use(noStore, protectWrites(origins));
 
@@ -51,6 +52,19 @@ export function createAuthRouter({ production, origins, getDatabaseStatus }) {
     },
   });
   router.use(['/register', '/login'], limiter);
+  const recoveryLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    limit: 5,
+    standardHeaders: 'draft-8',
+    legacyHeaders: false,
+    message: {
+      error: {
+        code: 'RATE_LIMITED',
+        message: 'Too many recovery attempts. Try again in 15 minutes.',
+      },
+    },
+  });
+  router.use(['/password-reset/request', '/password-reset/confirm'], recoveryLimiter);
   router.use(requireDatabase(getDatabaseStatus));
 
   router.post('/register', async (request, response) => {
@@ -105,6 +119,111 @@ export function createAuthRouter({ production, origins, getDatabaseStatus }) {
     }
     await issueSession(request, response, user, production);
     response.json({ user: accountResponse(user) });
+  });
+
+  router.post('/password-reset/request', async (request, response) => {
+    const email =
+      typeof request.body?.email === 'string' ? request.body.email.trim().toLowerCase() : '';
+    if (!isEmail(email)) {
+      return response.status(400).json({
+        error: {
+          code: 'VALIDATION_ERROR',
+          message: 'Enter a valid email address.',
+          fields: { email: 'Enter a valid email address.' },
+        },
+      });
+    }
+
+    // Keep the response identical for registered and unknown addresses.
+    const result = {
+      message: 'If an account matches that address, a password reset link will be sent.',
+    };
+    const user = await User.findOne({ email }).select('_id +email').lean().maxTimeMS(5000);
+    if (user && mailer?.configured) {
+      const token = randomBytes(32).toString('hex');
+      const tokenHash = digestToken(token);
+      try {
+        await PasswordResetToken.findOneAndUpdate(
+          { userId: user._id },
+          {
+            $set: {
+              tokenHash,
+              expiresAt: new Date(Date.now() + 30 * 60 * 1000),
+            },
+          },
+          { upsert: true, new: true, runValidators: true, setDefaultsOnInsert: true },
+        );
+        const resetUrl = new URL('/reset-password', origins[0]);
+        resetUrl.hash = new URLSearchParams({ token }).toString();
+        void mailer
+          .sendPasswordReset({ email: user.email, resetUrl: resetUrl.toString() })
+          .catch(() => {
+            void PasswordResetToken.deleteOne({ userId: user._id, tokenHash }).catch(() => {});
+            console.error('Password reset email could not be sent.');
+          });
+      } catch {
+        await PasswordResetToken.deleteOne({ userId: user._id, tokenHash }).catch(() => {});
+        console.error('Password reset email could not be sent.');
+      }
+    } else if (user) {
+      console.error('Password reset email is not configured.');
+    }
+    response.status(202).json(result);
+  });
+
+  router.post('/password-reset/confirm', async (request, response) => {
+    const token = typeof request.body?.token === 'string' ? request.body.token : '';
+    const password = request.body?.password;
+    const fields = {};
+    if (!/^[a-f0-9]{64}$/.test(token)) fields.token = 'This reset link is invalid or expired.';
+    if (!validPassword(password)) fields.password = 'Use a password of 12–128 characters.';
+    if (Object.keys(fields).length) {
+      return response.status(400).json({
+        error: {
+          code: 'VALIDATION_ERROR',
+          message: 'Please check the highlighted fields.',
+          fields,
+        },
+      });
+    }
+
+    const tokenHash = digestToken(token);
+    const expiresAt = { $gt: new Date() };
+    const exists = await PasswordResetToken.exists({ tokenHash, expiresAt });
+    if (!exists) {
+      return response.status(400).json({
+        error: {
+          code: 'RESET_LINK_INVALID',
+          message: 'This reset link is invalid or expired. Request a new one.',
+        },
+      });
+    }
+
+    const passwordHash = await hashPassword(password);
+    const reset = await PasswordResetToken.findOneAndDelete({ tokenHash, expiresAt });
+    if (!reset) {
+      return response.status(400).json({
+        error: {
+          code: 'RESET_LINK_INVALID',
+          message: 'This reset link is invalid or expired. Request a new one.',
+        },
+      });
+    }
+    const updated = await User.updateOne({ _id: reset.userId }, { $set: { passwordHash } });
+    if (!updated.matchedCount) {
+      return response.status(400).json({
+        error: {
+          code: 'RESET_LINK_INVALID',
+          message: 'This reset link is invalid or expired. Request a new one.',
+        },
+      });
+    }
+    await Promise.all([
+      Session.deleteMany({ userId: reset.userId }),
+      PasswordResetToken.deleteMany({ userId: reset.userId }),
+    ]);
+    clearSessionCookie(response, production);
+    response.json({ message: 'Password updated. Sign in with your new password.' });
   });
 
   router.get('/me', requireAccount(production), (request, response) => {

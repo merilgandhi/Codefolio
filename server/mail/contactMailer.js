@@ -1,6 +1,7 @@
 import nodemailer from 'nodemailer';
 import { isContactEmail } from '../../shared/contact.js';
 import { renderContactEmail } from './contactEmail.js';
+import { renderPasswordResetEmail } from './passwordResetEmail.js';
 
 export function readMailConfig(env = process.env) {
   const host = env.SMTP_HOST?.trim() || 'smtp.gmail.com';
@@ -60,6 +61,24 @@ export function createContactMailer(
         info.rejected?.length
       )
         throw new Error('Contact delivery was not accepted.');
+    },
+    async sendPasswordReset({ email, resetUrl }) {
+      if (!isContactEmail(email)) throw new Error('Password reset recipient is invalid.');
+      const content = renderPasswordResetEmail({ resetUrl });
+      const info = await transport.sendMail({
+        from: { name: 'CodeFolio', address: from },
+        to: { address: email },
+        envelope: { from, to: [email] },
+        subject: 'Reset your CodeFolio password',
+        ...content,
+        disableFileAccess: true,
+        disableUrlAccess: true,
+      });
+      if (
+        !info.accepted?.some((address) => String(address).toLowerCase() === email.toLowerCase()) ||
+        info.rejected?.length
+      )
+        throw new Error('Password reset delivery was not accepted.');
     },
   };
 }

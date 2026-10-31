@@ -8,6 +8,7 @@ import SeoProvider from './seo/SeoProvider.jsx';
 import SkipLink from './components/SkipLink.jsx';
 
 const AuthPage = lazy(() => import('./auth/AuthPage.jsx'));
+const PasswordRecoveryPage = lazy(() => import('./auth/PasswordRecoveryPage.jsx'));
 const Dashboard = lazy(() => import('./dashboard/Dashboard.jsx'));
 const PublicPortfolioPage = lazy(() => import('./portfolio/PublicPortfolioPage.jsx'));
 const PublicPortfolioAlias = lazy(() =>
@@ -36,6 +37,8 @@ export default function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/register" element={<AuthPage key="register" mode="register" />} />
                 <Route path="/login" element={<AuthPage key="login" mode="login" />} />
+                <Route path="/forgot-password" element={<PasswordRecoveryPage mode="request" />} />
+                <Route path="/reset-password" element={<PasswordRecoveryPage mode="reset" />} />
                 <Route element={<ProtectedRoute />}>
                   <Route path="/dashboard" element={<Dashboard />} />
                 </Route>
