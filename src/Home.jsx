@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from './auth/AuthContext.jsx';
 import ThemeToggle from './components/ThemeToggle.jsx';
@@ -16,44 +15,6 @@ const features = [
 
 export default function Home() {
   const { user } = useAuth();
-  const [health, setHealth] = useState({ state: 'loading' });
-  const [attempt, setAttempt] = useState(0);
-  useEffect(() => {
-    const controller = new AbortController();
-    let disposed = false;
-    const timeout = setTimeout(() => controller.abort(), 8000);
-    setHealth({ state: 'loading' });
-    fetch('/api/health', { signal: controller.signal })
-      .then((response) => {
-        if (!response.ok) throw new Error('API unavailable');
-        return response.json();
-      })
-      .then((data) => {
-        if (data.status !== 'ok' || data.service !== 'codefolio-api')
-          throw new Error('Unexpected response');
-        setHealth({ state: 'ready', database: data.database });
-      })
-      .catch(() => {
-        if (!disposed) setHealth({ state: 'error' });
-      })
-      .finally(() => clearTimeout(timeout));
-    return () => {
-      disposed = true;
-      clearTimeout(timeout);
-      controller.abort();
-    };
-  }, [attempt]);
-
-  const apiLabel =
-    health.state === 'ready' ? 'Connected' : health.state === 'error' ? 'Unavailable' : 'Checking…';
-  const dbLabel =
-    health.state !== 'ready'
-      ? 'Waiting for API'
-      : health.database === 'connected'
-        ? 'Connected'
-        : health.database === 'not_configured'
-          ? 'Not configured'
-          : 'Not connected';
 
   return (
     <div className="mx-auto max-w-[1440px] px-[6.3%] max-[900px]:px-[5%] [&_a:focus-visible]:outline-3 [&_a:focus-visible]:outline-focus [&_a:focus-visible]:outline-offset-5 [&_button:focus-visible]:outline-3 [&_button:focus-visible]:outline-focus [&_button:focus-visible]:outline-offset-5">
@@ -207,39 +168,6 @@ export default function Home() {
               </article>
             ))}
           </div>
-        </section>
-        <section
-          className="mb-[45px] flex items-center gap-[25px] rounded-[9px] bg-subtle px-6 py-5 max-[900px]:flex-wrap max-sm:gap-[18px] max-sm:p-[18px] max-sm:[&>div:first-child]:w-full [&_h2]:text-xs [&_h2]:font-semibold [&_p]:mt-1.5 [&_p]:text-[10px] [&_p]:text-quiet [&>button]:cursor-pointer [&>button]:rounded-[5px] [&>button]:border [&>button]:border-line [&>button]:bg-transparent [&>button]:px-2.5 [&>button]:py-[7px] [&>button]:text-[10px] [&>button:disabled]:cursor-wait [&>button:disabled]:opacity-50"
-          aria-labelledby="connection-title"
-        >
-          <div>
-            <h2 id="connection-title">Under the hood</h2>
-            <p>Live connection status for this workspace.</p>
-          </div>
-          <div
-            className="ml-auto flex gap-[25px] max-[900px]:ml-0 max-[900px]:flex-1 max-[900px]:gap-2.5 max-sm:flex-wrap max-sm:gap-3 [&>span]:flex [&>span]:items-center [&>span]:gap-[7px] [&>span]:text-[10px] [&>span]:text-muted max-sm:[&>span]:w-full [&_strong]:rounded [&_strong]:bg-subtle [&_strong]:px-1.5 [&_strong]:py-1 [&_strong]:text-[9px] [&_strong]:font-medium"
-            role="status"
-            aria-live="polite"
-          >
-            <span>
-              <i
-                className={`size-1.5 shrink-0 rounded-full ${health.state === 'ready' ? 'bg-status-ok' : 'bg-status-warn'}`}
-              />
-              Express API <strong>{apiLabel}</strong>
-            </span>
-            <span>
-              <i
-                className={`size-1.5 shrink-0 rounded-full ${health.database === 'connected' ? 'bg-status-ok' : 'bg-status-warn'}`}
-              />
-              MongoDB <strong>{dbLabel}</strong>
-            </span>
-          </div>
-          <button
-            onClick={() => setAttempt((value) => value + 1)}
-            disabled={health.state === 'loading'}
-          >
-            Recheck <span aria-hidden="true">↻</span>
-          </button>
         </section>
       </main>
       <footer className="flex justify-between border-t border-line-soft pt-[22px] pb-7 text-[10px] text-quiet max-sm:flex-wrap max-sm:gap-[15px] max-sm:text-[9px] max-sm:[&>span:nth-child(2)]:hidden">
