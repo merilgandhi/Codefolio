@@ -1,72 +1,60 @@
 # Production deployment
 
-CodeFolio is prepared for a single-service Koyeb deployment. Express serves the compiled React application and every `/api` route from the same HTTPS origin, so the existing session, origin and request protections continue to work without CORS changes.
+CodeFolio is configured for one free Render Web Service. Express serves the compiled React app and all `/api` routes from the same HTTPS origin, preserving the existing session, origin and request protections without adding CORS.
 
-This document contains configuration names only. Keep the MongoDB URI, SMTP password and other credentials in Koyeb Secrets. Never paste them into source files, build commands or deployment logs.
+Render Free blocks SMTP ports 25, 465 and 587. The contact form keeps Nodemailer and uses Resend SMTP on STARTTLS port 2587, which is not among Render's blocked ports. Resend Free currently includes 3,000 transactional emails per month with a 100-email daily limit. Render Free may sleep after 15 minutes without traffic, so a first visit can take about a minute to wake.
 
-## Why Koyeb
+## Deploy from GitHub
 
-The free Koyeb web instance supports Node.js, GitHub deployments, managed TLS and outbound SMTP on port 587. Render's current free web service blocks SMTP ports, so it cannot run the existing Gmail/Nodemailer delivery path without changing the email provider or using a paid instance.
+1. Sign in to Render and create a Blueprint from `merilgandhi/Codefolio`, branch `master`.
+2. Review `render.yaml`; create the `codefolio-meril` Web Service on the Free plan in Singapore.
+3. Before the service starts, add the required secrets in the Render service's Environment page as described below.
+4. Add the Render service's outbound network access in Atlas and verify Atlas allows the host to connect.
+5. Wait for the deploy and open `https://codefolio-meril.onrender.com/api/health`.
 
-The free instance can scale to zero after inactivity, so the first visit after a quiet period can take longer. It is appropriate for the internship demonstration, not a high-availability production service.
+The tracked Blueprint sets `pnpm install --frozen-lockfile && pnpm build`, `pnpm start` and `/api/health`. Render supplies `PORT`; the app binds to `0.0.0.0` in production. Render terminates HTTPS and redirects inbound HTTP to HTTPS. `TRUST_PROXY=1` enables the single trusted proxy hop required for secure cookies and client-address limits.
 
-## Repository settings
+## Secrets and settings
 
-Create one Web Service from `merilgandhi/Codefolio` using the `master` branch and the Node.js buildpack.
+Keep secret values in Render's environment settings, never in the repository or chat.
 
-| Setting       | Value                                                 |
-| ------------- | ----------------------------------------------------- |
-| Instance      | Free                                                  |
-| Region        | Frankfurt or Washington, D.C.                         |
-| Build command | `pnpm build`                                          |
-| Run command   | Leave blank; the tracked `Procfile` runs `pnpm start` |
-| Exposed port  | `8000` using HTTP, routed from `/`                    |
-| Health check  | HTTP `GET /api/health`                                |
+| Name          | Value                                          |
+| ------------- | ---------------------------------------------- |
+| `NODE_ENV`    | `production`                                   |
+| `APP_ORIGIN`  | `https://codefolio-meril.onrender.com`         |
+| `TRUST_PROXY` | `1`                                            |
+| `MONGODB_URI` | Atlas connection string, as a secret           |
+| `SMTP_HOST`   | `smtp.resend.com`                              |
+| `SMTP_PORT`   | `2587`                                         |
+| `SMTP_USER`   | `resend`                                       |
+| `SMTP_PASS`   | Resend API key, as a secret                    |
+| `SMTP_FROM`   | A sender address allowed by the Resend account |
 
-Koyeb supplies `PORT` from the exposed port. CodeFolio binds to `0.0.0.0` automatically when `NODE_ENV=production`; local development still binds to `127.0.0.1`.
+Resend requires sender verification for general delivery. Its onboarding sender is restricted to the verified account recipient; to receive messages at an arbitrary portfolio owner's address, verify a domain and set `SMTP_FROM` to an address on it. Do not send real portfolio contact messages until the sender and intended inbox have been checked.
 
-## Environment variables and secrets
+## Atlas access
 
-Configure these values in the service rather than uploading the local `.env` file:
+Add the Render service's outbound address to Atlas Network Access. Render Free does not provide a stable outbound IP, so it cannot be restricted to one fixed IP. A broad `0.0.0.0/0` rule exposes the database endpoint to connection attempts from anywhere; if you choose that for the internship demonstration, use a dedicated least-privilege database user and a strong secret held only in Render. A host with static egress or private networking is the stricter option.
 
-| Name          | Value or source                                     |
-| ------------- | --------------------------------------------------- |
-| `NODE_ENV`    | `production`                                        |
-| `APP_ORIGIN`  | `https://{{ KOYEB_PUBLIC_DOMAIN }}`                 |
-| `TRUST_PROXY` | `1`                                                 |
-| `MONGODB_URI` | Koyeb Secret containing the Atlas connection string |
-| `SMTP_HOST`   | `smtp.gmail.com`                                    |
-| `SMTP_PORT`   | `587`                                               |
-| `SMTP_USER`   | Koyeb Secret containing the Gmail address           |
-| `SMTP_PASS`   | Koyeb Secret containing the Gmail App Password      |
-| `SMTP_FROM`   | Omit unless Gmail has approved a different sender   |
+## Deployed acceptance checks
 
-`TRUST_PROXY=1` matches the single Koyeb edge hop used to supply the client address. Koyeb terminates TLS at its edge and gives the app a public `.koyeb.app` HTTPS domain.
-
-## Atlas network access
-
-Koyeb does not publish a static outbound IP for this service. Atlas accepts connections only from its project IP access list, so a free Koyeb deployment cannot be restricted to one stable Koyeb address.
-
-For the internship demonstration, the practical option is an Atlas `0.0.0.0/0` entry paired with a dedicated least-privilege database user and a new strong password used only by this app. MongoDB warns that this CIDR permits connections from anywhere; use the database credentials as Koyeb Secrets and rotate them if they have ever been shared. A paid host with static egress or private networking is the stricter long-term option.
-
-## Deployment acceptance check
-
-After Koyeb reports the deployment healthy, verify the generated HTTPS URL in this order:
+After the HTTPS service is healthy:
 
 1. `/api/health` returns `status: "ok"` and `database: "connected"`.
 2. Registration, login, dashboard refresh and logout work with Secure cookies.
 3. Profile, project, skill and template edits persist after a fresh login.
-4. Both permanent showcase URLs render the intended layouts anonymously.
-5. One explicitly approved contact-form message reaches the correct owner inbox.
-6. Direct visits to `/dashboard`, `/:username` and `/user/:username` behave correctly.
-7. Desktop and mobile views work in both light and dark modes.
+4. Both showcase URLs render their intended layouts anonymously.
+5. A contact form message reaches the verified owner inbox using Resend SMTP.
+6. Direct visits to `/dashboard`, `/:username` and `/user/:username` work.
+7. Desktop/mobile layouts and both color modes work.
 
-Only after these checks pass should requirement L01 be marked verified. The permanent showcase profiles and their two public URLs complete L02 separately.
+Only after these checks pass should requirement L01 be marked verified. The two permanent showcase profiles and their public URLs complete L02.
 
 ## References
 
-- [Koyeb Express deployment](https://www.koyeb.com/docs/deploy/express)
-- [Koyeb Node.js buildpack](https://www.koyeb.com/docs/build-and-deploy/build-from-git/nodejs)
-- [Koyeb environment variables](https://www.koyeb.com/docs/build-and-deploy/environment-variables)
-- [Koyeb outbound port policy](https://www.koyeb.com/docs/faqs/general)
+- [Render's first deploy](https://render.com/docs/your-first-deploy)
+- [Render Free services and SMTP restrictions](https://render.com/docs/free)
+- [Render health checks](https://render.com/docs/health-checks)
+- [Resend SMTP configuration](https://resend.com/changelog/smtp-service)
+- [Resend plans and free limits](https://resend.com/pricing)
 - [MongoDB Atlas IP access lists](https://www.mongodb.com/docs/atlas/security/ip-access-list/)

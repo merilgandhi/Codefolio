@@ -13,7 +13,7 @@ export function readMailConfig(env = process.env) {
     !pass ||
     !isContactEmail(from) ||
     !/^[a-z0-9.-]+$/i.test(host) ||
-    ![465, 587].includes(port)
+    ![465, 587, 2587].includes(port)
   )
     return null;
   return { host, port, secure: port === 465, requireTLS: port !== 465, auth: { user, pass }, from };

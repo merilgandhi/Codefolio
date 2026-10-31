@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: codefolio-meril
+    runtime: node
+    plan: free
+    region: singapore
+    buildCommand: pnpm install --frozen-lockfile && pnpm build
+    startCommand: pnpm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: APP_ORIGIN
+        value: https://codefolio-meril.onrender.com
+      - key: TRUST_PROXY
+        value: '1'
+      - key: MONGODB_URI
+        sync: false
+      - key: SMTP_HOST
+        value: smtp.resend.com
+      - key: SMTP_PORT
+        value: '2587'
+      - key: SMTP_USER
+        value: resend
+      - key: SMTP_PASS
+        sync: false
+      - key: SMTP_FROM
+        sync: false

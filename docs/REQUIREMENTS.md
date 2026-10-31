@@ -93,7 +93,7 @@ The published tree contains 140 source/configuration/documentation files organiz
 
 ## Deployment preparation
 
-On 2026-10-31, the server was prepared for a single-service Koyeb deployment: production binds to the hosting interface, pnpm is pinned, a production `Procfile` is tracked and `docs/DEPLOYMENT.md` records the same-origin build, secrets, Atlas networking, SMTP and acceptance settings. This preparation does not complete L01. A public HTTPS deployment and its full workflow verification remain pending.
+On 2026-10-31, the server was prepared for a single-service free Render deployment: production binds to the hosting interface, pnpm is pinned, a production Blueprint and `Procfile` are tracked, and `docs/DEPLOYMENT.md` records the same-origin build, secrets, Atlas networking, SMTP and acceptance settings. The contact sender is configured to allow Resend's STARTTLS port 2587, preserving Nodemailer on Render Free. This preparation does not complete L01. A public HTTPS deployment and its full workflow verification remain pending.
 
 ## Pro custom-domain simulation completed
 

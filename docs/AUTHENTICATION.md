@@ -40,7 +40,7 @@ If MongoDB is unavailable, account routes return 503 instead of buffering reques
 - `TRUST_PROXY=1` supports one trusted reverse proxy. Leave it disabled locally and verify the deployment topology before enabling it. Do not expose the application directly while blindly trusting arbitrary forwarded headers.
 - Application startup awaits User and Session indexes when a database is configured. Unique indexes enforce account identity and TTL indexes clean up sessions.
 - Atlas credentials remain in local `.env`, never frontend code, tracked files or test output.
-- The selected Koyeb configuration and deployed acceptance steps are documented in [DEPLOYMENT.md](DEPLOYMENT.md).
+- The selected Render configuration and deployed acceptance steps are documented in [DEPLOYMENT.md](DEPLOYMENT.md).
 
 ## Verification completed
 

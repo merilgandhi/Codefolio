@@ -42,7 +42,7 @@ SMTP_FROM=
 
 Remove display-group spaces from the App Password. Leave `SMTP_FROM` empty to use `SMTP_USER`, or set a sender address permitted by the provider. Credentials must never use a `VITE_` prefix or be committed. Restart the API after changing `.env`.
 
-Port **587 with required STARTTLS** was verified on this connection. The initial port 465 check failed to connect; 587 authenticated successfully. The transport also supports direct TLS on 465. Certificate verification is retained. See Nodemailer's [SMTP configuration](https://nodemailer.com/smtp) and [message/Reply-To configuration](https://nodemailer.com/message).
+Gmail port **587 with required STARTTLS** was verified on this connection. The initial port 465 check failed to connect; 587 authenticated successfully. The transport also supports direct TLS on 465. Render Free blocks those SMTP ports, so its deployment uses Resend STARTTLS on port 2587. Certificate verification is retained. See Nodemailer's [SMTP configuration](https://nodemailer.com/smtp) and [message/Reply-To configuration](https://nodemailer.com/message).
 
 ## Validation and abuse controls
 
