@@ -29,6 +29,7 @@
     "qa:polish": "node server/scripts/qa-polish.js",
     "qa:contact": "node server/scripts/qa-polish.js --contact",
     "verify:mail": "node server/scripts/verify-mail.js",
+    "gmail:oauth": "node server/scripts/setup-gmail-oauth.js",
     "verify:contact:delivery": "node server/scripts/send-contact-check.js",
     "preview:email": "node server/scripts/preview-contact-email.js",
     "account:tier": "node server/scripts/manage-tier.js",

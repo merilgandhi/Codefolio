@@ -56,7 +56,7 @@ To verify the configured Atlas database with temporary records, run `pnpm verify
 
 Run `pnpm verify:auth` for opt-in authentication integration checks against Atlas with temporary accounts and sessions. See [authentication flow, protections and verification limits](docs/AUTHENTICATION.md). Test fixtures are removed after checks.
 
-Forgot-password recovery is available from the sign-in page. It sends a one-use link that expires after 30 minutes, stores only a token digest, and revokes existing sessions after a successful reset. Configure the production SMTP sender before relying on account recovery; see [authentication and recovery details](docs/AUTHENTICATION.md).
+Forgot-password recovery is available from the sign-in page. It sends a one-use link that expires after 30 minutes, stores only a token digest, and revokes existing sessions after a successful reset. Configure the production Gmail OAuth sender before relying on account recovery; see [authentication and recovery details](docs/AUTHENTICATION.md).
 
 Run `pnpm verify:profile` for real profile-saving, ownership isolation and stale-edit checks against Atlas using temporary accounts. See [profile editor details](docs/PROFILE-EDITOR.md).
 
@@ -78,7 +78,7 @@ Public portfolio titles and descriptions use saved profile data through React He
 
 Both portfolio layouts have completed the local responsive, keyboard, contrast and image-loading review. A skip link provides direct keyboard access to main content, and long skill tags fit the mobile editor. See [polish fixes, browser evidence and review helper](docs/RESPONSIVE-ACCESSIBILITY.md).
 
-Both public layouts have a Nodemailer contact form with private server-side recipient lookup, validation, safe failure states and abuse limits. Email uses a responsive CodeFolio HTML layout with a complete plain-text alternative; the owner confirmed its appearance and delivery in Gmail. Configure `SMTP_USER` and `SMTP_PASS` locally; port 587 uses required STARTTLS. Render Free uses Resend STARTTLS on port 2587. Run `npm run verify:mail` to verify SMTP without sending, or `npm run preview:email` for a local design preview. See [contact setup, privacy and verification](docs/CONTACT-EMAIL.md).
+Both public layouts share a contact form with private server-side recipient lookup, validation, safe failure states and abuse limits. Nodemailer composes the responsive CodeFolio HTML and plain-text email; in production, Gmail's HTTPS API delivers it with the narrow `gmail.send` OAuth scope, so it works from Render Free without SMTP ports. Run `npm run gmail:oauth` to create a local refresh token after configuring Google OAuth, `npm run verify:mail` to verify OAuth without sending, or `npm run preview:email` for a local design preview. Local development can still use Nodemailer SMTP. See [contact setup, privacy and verification](docs/CONTACT-EMAIL.md).
 
 Use **Upgrade to Pro** or **Manage plan** in the dashboard header to choose Free or Pro, then click **Save plan**. This is clearly labelled **Demo mode — no payment required**. The selection persists in MongoDB; Pro enables the public badge and custom-domain simulation, while Free pauses them without deleting portfolio content or the saved domain. The server checks the session owner, allowed plan and edit version. **Refresh plan** and the operator CLI remain available. Run `npm run verify:plans` for two-account Atlas checks, including selection in both directions, feature access and exact cleanup. See [plan selection, provisioning and verification](docs/PRO-ACCESS.md).
 
@@ -124,7 +124,7 @@ The complete PDF requirement matrix, acceptance checks, scope decisions and curr
 - [x] Unsaved live preview for profile, projects, skills and template selection
 - [x] React Helmet SEO with server document and client navigation verification
 - [x] Local responsive, accessibility and image-loading polish
-- [x] Nodemailer contact email with confirmed real inbox delivery
+- [x] Contact email flow and branded templates; production Gmail OAuth setup is pending
 - [x] Pro badge, operator tier assignment and server-enforced premium authorization
 - [x] Pro-only domain simulation
 - [x] System design note explaining public username routing

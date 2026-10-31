@@ -11,7 +11,7 @@
 7. Logging in again replaces the presented session token and revokes that previous session. Other independent sessions are not revoked.
 8. `/dashboard` waits for the server's session check. Anonymous visitors go to login; connectivity failures display retry rather than falsely treating the visitor as logged out. Its starting page displays only the current account's identity and offers logout.
 9. Logout deletes the presented server-side session and clears the cookie. It can be repeated safely.
-10. `/forgot-password` always returns the same confirmation for valid-shaped addresses. Existing accounts receive a reset link by Nodemailer; unknown addresses do not reveal account status.
+10. `/forgot-password` always returns the same confirmation for valid-shaped addresses. Existing accounts receive a reset link through the configured mailer (Gmail HTTPS API in production); unknown addresses do not reveal account status.
 11. Reset links contain a cryptographically random token in the URL fragment. MongoDB stores only its SHA-256 digest, with a 30-minute expiry and one active link per account. `/reset-password` accepts the token once, updates the scrypt password hash, removes all sessions, and invalidates any other reset links.
 
 Node API reference: [scrypt and timing-safe comparisons](https://nodejs.org/api/crypto.html).
@@ -33,7 +33,7 @@ All writes require JSON and `X-Codefolio-Request: 1`. Browser writes from disall
 
 Registration and login share an IP-based rate limit of 20 requests per 15 minutes. The limiter uses process memory: it resets on API restart and is not shared across replicas. Configure a shared limiter store before deploying multiple instances. Reference: [express-rate-limit](https://github.com/express-rate-limit/express-rate-limit).
 
-Password recovery shares a separate five-request-per-IP limit across requests and confirmations in a 15-minute window. It requires the existing SMTP configuration (`SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` and an allowed `SMTP_FROM`). Delivery failures are kept out of the public response to avoid disclosing whether an account exists; check server logs and provider configuration if the link does not arrive. The in-memory limit is per process and resets on restart.
+Password recovery shares a separate five-request-per-IP limit across requests and confirmations in a 15-minute window. In production it requires Gmail OAuth configuration (`GMAIL_USER`, `GMAIL_CLIENT_ID`, `GMAIL_CLIENT_SECRET` and `GMAIL_REFRESH_TOKEN`). Delivery failures are kept out of the public response to avoid disclosing whether an account exists; check server logs and Google OAuth settings if the link does not arrive. The in-memory limit is per process and resets on restart.
 
 If MongoDB is unavailable, account routes return 503 instead of buffering requests. Authentication responses use `Cache-Control: no-store`. Unexpected driver errors use the generic API error response and are not sent raw to clients.
 

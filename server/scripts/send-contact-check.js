@@ -7,7 +7,7 @@ const port = Number(process.env.PORT || 4000);
 if (
   !username ||
   !process.argv.includes('--send') ||
-  !isContactEmail(process.env.SMTP_USER) ||
+  !isContactEmail(process.env.GMAIL_USER) ||
   !Number.isInteger(port) ||
   port < 1 ||
   port > 65535
@@ -24,7 +24,7 @@ if (
       headers: { 'Content-Type': 'application/json', 'X-Codefolio-Request': '1' },
       body: JSON.stringify({
         name: 'CodeFolio verification',
-        email: process.env.SMTP_USER,
+        email: process.env.GMAIL_USER,
         subject: 'CodeFolio contact-form delivery test',
         message: `This is the single CodeFolio contact-form test requested for @${username}. If you can read it, the delivery check worked. Please confirm receipt in the chat.`,
         website: '',
@@ -33,7 +33,7 @@ if (
     await response.text();
     if (!response.ok) throw new Error(`HTTP_${response.status}`);
     console.log(
-      `PASS: One test message for @${username} was accepted for delivery through the contact API. Confirm it arrived in the registered inbox; SMTP acceptance alone does not prove receipt.`,
+      `PASS: One test message for @${username} was accepted for delivery through the contact API. Confirm it arrived in the registered inbox; API acceptance alone does not prove receipt.`,
     );
   } catch (error) {
     console.error(
