@@ -61,6 +61,6 @@ Repeat `pnpm verify:auth` only against the intended development database. It cre
 
 ## Remaining work
 
-Profile, project, skills, template, plan and domain writes use the authenticated account on the server and have passed ownership or authorization checks. See the respective editor notes. Production contact email and password-reset flows have been confirmed; authenticated editor, plan and domain flows still need a complete production walkthrough.
+Profile, project and skills saves have been exercised on the production account; whitespace normalization preserved the existing profile and skills content, while the separately requested project description update propagated publicly. The saved template and preview loaded. Free-to-Pro-to-Free selection and a temporary Pro domain redirect were verified, then the test domain was removed. Production contact and password-reset delivery were confirmed by the user. New-account registration and sign-out were not repeated on production; the integration suite covers them locally.
 
 Signup email verification and multi-factor authentication are not implemented or explicitly requested in the project brief. Account email addresses are syntax-checked, not ownership-verified.

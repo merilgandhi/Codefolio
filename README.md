@@ -131,4 +131,4 @@ The complete PDF requirement matrix, acceptance checks, scope decisions and curr
 - [x] GitHub repository containing application source, tests and setup documentation
 - [x] Render Free HTTPS deployment: https://codefolio-meril.onrender.com
 - [x] Two permanent showcase profiles using distinct layouts: [Meril Gandhi](https://codefolio-meril.onrender.com/meril2203) and [Nisha Patel](https://codefolio-meril.onrender.com/nisha-patel-dev)
-- [ ] Complete production workflow review, including authenticated editor/plan/domain flows
+- [ ] Complete remaining production acceptance checks for new-account registration and sign-out; dashboard editors, plan/domain simulation, contact delivery and password recovery have been smoke-checked

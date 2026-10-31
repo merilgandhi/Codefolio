@@ -36,4 +36,4 @@ The UI labels this a **Redirect simulation**. It does not configure DNS, verify 
 
 Repeat with `npm test`, `npm run build`, `npm run verify:rendering`, and `npm run verify:domains` (requires configured Atlas). `npm run qa:domains` runs the checks and holds the same two fixtures for browser review with isolated cookies and external email disabled. Write `cleanup` to the ignored `.polish-qa-control` file or use Ctrl+C to finish with exact fixture removal.
 
-The application is deployed at `https://codefolio-meril.onrender.com`, and GitHub publication is complete. The production Pro-domain redirect and tier-change flow still need a deployed end-to-end check.
+Production smoke check completed on 2026-10-31: the signed-in `@meril2203` account temporarily enabled Pro, saved `qa-meril2203-20261031.example.com`, and the test URL redirected to `/meril2203`. The temporary hostname was removed; a follow-up request returned `DOMAIN_NOT_FOUND`. The account was restored to Free, no payment was made, and no saved custom domain remains. The application is deployed at `https://codefolio-meril.onrender.com`, and GitHub publication is complete.

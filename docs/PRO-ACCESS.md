@@ -74,4 +74,4 @@ npm run verify:plans
 
 The ignored `.polish-qa-control` file accepts `plan-promote-a`, `plan-demote-a`, `plan-promote-b`, `plan-demote-b` and the existing visual-fixture commands. Wait for `PLAN_READY`, then refresh the plan or public page. Finish with `cleanup` so the helper verifies record removal and exits. Ctrl+C also triggers cleanup.
 
-The Pro-only domain simulation is verified locally; see [domain workflow and checks](CUSTOM-DOMAINS.md). The app is deployed over HTTPS, but production plan changes and domain redirects still need an end-to-end check.
+On 2026-10-31, a production smoke check upgraded the signed-in `@meril2203` account from Free to Pro, confirmed the Pro badge and custom-domain settings appeared, then restored Free. No payment was made. The domain redirect was separately tested with a temporary reserved `example.com` hostname and the domain was removed afterward. See [domain workflow and checks](CUSTOM-DOMAINS.md).
